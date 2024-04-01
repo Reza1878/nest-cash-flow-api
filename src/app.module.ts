@@ -8,7 +8,6 @@ import { format, transports } from 'winston';
 import { AuthenticationModule } from './Interfaces/http/authentication/authentication.module';
 import 'winston-daily-rotate-file';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -26,17 +25,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         }),
       ],
     }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
+    JwtModule.register({
       global: true,
-      useFactory: async (configService: ConfigService) => {
-        return {
-          signOptions: {
-            expiresIn: configService.get('ACCCESS_TOKEN_AGE'),
-          },
-        };
-      },
     }),
     CommonModule,
     DatabaseModule,

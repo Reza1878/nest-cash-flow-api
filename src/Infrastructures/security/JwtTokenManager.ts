@@ -33,6 +33,7 @@ export class JwtTokenManager extends TokenManager {
     try {
       this.jwtService.verify(token, {
         secret: this.configService.get('REFRESH_TOKEN_KEY'),
+        maxAge: this.configService.get('ACCCESS_TOKEN_AGE'),
       });
     } catch (error) {
       throw new AuthenticationError('Token is invalid');
@@ -52,6 +53,14 @@ export class JwtTokenManager extends TokenManager {
   decodePayload(token: string) {
     const payload = this.jwtService.verify(token, {
       secret: this.configService.get('ACCESS_TOKEN_KEY'),
+    });
+
+    return payload;
+  }
+
+  decodeRefreshToken(token: string) {
+    const payload = this.jwtService.verify(token, {
+      secret: this.configService.get('REFRESH_TOKEN_KEY'),
     });
 
     return payload;
