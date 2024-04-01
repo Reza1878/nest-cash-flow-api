@@ -10,7 +10,9 @@ export class AuthMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: any, res: any, next: () => void) {
-    const token = (req.headers['authorization'] as string).split(' ')[1];
+    const token = ((req.headers['authorization'] ?? '') as string).split(
+      ' ',
+    )[1];
 
     if (token) {
       const { user_id } = this.tokenManager.decodePayload(token);

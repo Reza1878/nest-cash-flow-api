@@ -1,5 +1,5 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
-import AuthorizationError from '../exceptions/AuthorizationError';
+import AuthenticationError from '../exceptions/AuthenticationError';
 
 export const Auth = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
@@ -7,7 +7,7 @@ export const Auth = createParamDecorator(
 
     const { user } = req;
 
-    if (!user) throw new AuthorizationError('Unauthorized');
+    if (!user) throw new AuthenticationError('Unauthorized');
 
     return user;
   },
