@@ -1,14 +1,17 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Post } from '@nestjs/common';
 import { LoginUserUseCase } from '../../../Applications/use_case/user/LoginUserUseCase';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RefreshAccessTokenUseCase } from '../../../Applications/use_case/auth/RefreshAccessTokenUseCase';
+import { LogoutUserUseCase } from '../../../Applications/use_case/user/LogoutUserUseCase';
+import { LogoutUserDto } from './dto/logout-user.dto';
 
 @Controller('auth')
 export class AuthenticationController {
   constructor(
     private loginUseCase: LoginUserUseCase,
     private refreshTokenUseCase: RefreshAccessTokenUseCase,
+    private logoutUserUseCase: LogoutUserUseCase,
   ) {}
 
   @Post('/session')
@@ -30,6 +33,15 @@ export class AuthenticationController {
     return {
       message: 'Token refreshed successfully!',
       data: { accessToken },
+    };
+  }
+
+  @Delete('/session')
+  async logout(@Body() dto: LogoutUserDto) {
+    await this.logoutUserUseCase.execute(dto);
+
+    return {
+      message: 'Logout success',
     };
   }
 }
